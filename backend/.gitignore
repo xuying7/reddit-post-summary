@@ -1,0 +1,36 @@
+# Environment variables (IMPORTANT for secrets)
+.env
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment folders (common names)
+venv/
+.venv/
+env/
+.env/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# IDE / Editor specific files (optional)
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files (optional)
+.DS_Store
+Thumbs.db
+
+# Add any other backend-specific files to ignore (e.g., logs)
+*.log
