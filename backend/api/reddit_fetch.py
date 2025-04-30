@@ -75,13 +75,13 @@ def get_access_token():
         print(f"An unexpected error occurred during authentication: {e}")
         return None
 
-def search_subreddit(token, subreddit, keyword, sort_order="hot", limit=25):
+def search_subreddit(token, subreddit, keyword, limit=25):
     
     if not token:
         print("Error: No access token provided for search.")
         return None
 
-    print(f"\nSearching r/{subreddit} for keyword '{keyword}', sorting by '{sort_order}'...")
+    print(f"\nSearching r/{subreddit} for keyword '{keyword}', sorting by ''...")
     try:
         # Construct the API endpoint URL
         search_url = f"{API_BASE_URL}/r/{subreddit}/search.json"
@@ -96,7 +96,7 @@ def search_subreddit(token, subreddit, keyword, sort_order="hot", limit=25):
         params = {
             'q': keyword,
             'restrict_sr': 'true', # Restrict search to the specified subreddit
-            'sort': sort_order,
+            'sort': 'hot',
             'limit': limit
             # 't': 'week' # Optional: time filter for 'top' or 'controversial' sort (e.g., 'hour', 'day', 'week', 'month', 'year', 'all')
         }
@@ -116,7 +116,21 @@ def search_subreddit(token, subreddit, keyword, sort_order="hot", limit=25):
             return []
 
         print(f"Found {len(posts)} posts.")
-        return [post.get('data') for post in posts if post.get('data')] # Return list of post data dicts
+        post_list = []
+        for post in posts:
+            post_data = post.get('data', {})
+            post_list.append({
+                'id': post_data.get('id'),
+                'title': post_data.get('title'),
+                'author': post_data.get('author'),
+                'selftext': post_data.get('selftext'),
+                'score': post_data.get('score'),
+                'num_comments': post_data.get('num_comments'),
+                'permalink': post_data.get('permalink'),
+                'created_utc': post_data.get('created_utc')
+            })
+            
+        return post_list
 
     except requests.exceptions.RequestException as e:
         print(f"Error during search request: {e}")
@@ -134,6 +148,49 @@ def search_subreddit(token, subreddit, keyword, sort_order="hot", limit=25):
         print(f"An unexpected error occurred during search: {e}")
         return None
 
+def get_post_content(token, post_id, subreddit, limit=100):
+    
+    if not token:
+        print("Error: No access token provided for post content retrieval.")
+        return None
+
+    comments_url = f"{API_BASE_URL}/r/{subreddit}/comments/{post_id}.json"
+    headers = {
+        'Authorization': f"bearer {token}",
+        'User-Agent': USER_AGENT
+    }
+
+    params = {
+        'limit': limit
+    }
+    
+    response = requests.get(comments_url, headers=headers, params=params)
+    response.raise_for_status()
+    # Reddit returns an array with 2 elements: [0] = post data, [1] = comments
+    result = response.json()
+    if len(result) < 2:
+        return []
+        
+    # Extract comments from the second element
+    comments_data = result[1].get('data', {}).get('children', [])
+    
+    # Process comments
+    comments = []
+    for comment in comments_data:
+        if comment.get('kind') == 't1':  # t1 = comment
+            comment_data = comment.get('data', {})
+            # Skip deleted/removed comments
+            if comment_data.get('body') in ['[deleted]', '[removed]']:
+                continue
+                
+            comments.append({
+                'author': comment_data.get('author'),
+                'body': comment_data.get('body'),
+                'score': comment_data.get('score'),
+                'created_utc': comment_data.get('created_utc')
+            })
+            
+    return comments
 # --- Main Execution ---
 if __name__ == "__main__":
     access_token = get_access_token()
