@@ -75,7 +75,7 @@ def get_access_token():
         print(f"An unexpected error occurred during authentication: {e}")
         return None
 
-def search_subreddit(token, subreddit, keyword, limit=25):
+def search_subreddit(token, subreddit, keyword, limit):
     
     if not token:
         print("Error: No access token provided for search.")

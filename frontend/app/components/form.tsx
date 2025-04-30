@@ -26,15 +26,21 @@ interface FormData {
   subreddit: string;
   keyword: string;
   question: string;
-  numberOfPosts: string;
+  numberOfPosts: string; // This will be converted to 'limit' when sending to backend
   repeatHours: string;
   repeatMinutes: string;
 }
 
 // Define the props for the component (if any are needed later)
-interface QueryFormProps {}
+interface QueryFormProps {
+  onSubmit?: (formData: any) => void;
+  setIsLoading?: (isLoading: boolean) => void;
+}
 
-const QueryForm: React.FC<QueryFormProps> = () => {
+const QueryForm: React.FC<QueryFormProps> = ({
+  onSubmit,
+  setIsLoading: setParentLoading,
+}) => {
   // State to hold the form input values, initialized with new fields
   const [formData, setFormData] = useState<FormData>({
     subreddit: "",
@@ -87,25 +93,33 @@ const QueryForm: React.FC<QueryFormProps> = () => {
 
   // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default browser form submission
-    setIsLoading(true); // Set loading state
-    setStatusMessage(null); // Clear previous status messages
+    e.preventDefault();
+    setIsLoading(true);
+    if (setParentLoading) setParentLoading(true);
+    setStatusMessage(null);
 
-    // Convert numeric fields from string before sending if needed, or handle on backend
+    // Convert numeric fields to ensure backend receives what it expects
     const submissionData = {
       ...formData,
-      // Example conversion (optional, can be done on backend):
-      // numberOfPosts: parseInt(formData.numberOfPosts, 10),
-      // repeatHours: parseInt(formData.repeatHours, 10),
-      // repeatMinutes: parseInt(formData.repeatMinutes, 10),
+      // Convert values to match what the backend expects
+      numberOfPosts: formData.numberOfPosts,
+      repeatHours: formData.repeatHours,
+      repeatMinutes: formData.repeatMinutes,
     };
 
     console.log("Submitting form data:", submissionData);
 
+    // Call the parent's onSubmit handler if provided
+    if (onSubmit) {
+      onSubmit(submissionData);
+      return; // Parent will handle everything else
+    }
+
+    // Otherwise use regular fetch (fallback for non-SSE behavior)
     try {
       // Send form data to the backend API route
       // Replace '/api/submit' with your actual backend endpoint
-      const response = await fetch("/api/submit", {
+      const response = await fetch("http://localhost:8000/api/query", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -144,7 +158,8 @@ const QueryForm: React.FC<QueryFormProps> = () => {
         }`
       );
     } finally {
-      setIsLoading(false); // Reset loading state regardless of outcome
+      setIsLoading(false);
+      if (setParentLoading) setParentLoading(false);
     }
   };
 

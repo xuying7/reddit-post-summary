@@ -1,83 +1,120 @@
-from api.reddit_fetch import search_subreddit, get_post_content, get_access_token
-from api.ai_analysis import analyze_reddit_content
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from api.process_query import process_reddit_query
+import json
+from typing import List, Dict, Any
 
-def process_reddit_query(subreddit, keyword, question):
-    """
-    Main function that orchestrates the workflow:
-    1. Fetch relevant Reddit posts
-    2. Get comments for those posts
-    3. Analyze the content with OpenAI
-    
-    Args:
-        subreddit: The subreddit to search (e.g., "UofT")
-        keyword: The search keyword (e.g., "bird course")
-        question: The specific question to analyze (e.g., "What are the easiest bird courses at UofT?")
-        
-    Returns:
-        Analysis results or error message
-    """
-    # Step 1: Search for relevant posts
-    print(f"Searching r/{subreddit} for posts about '{keyword}'...")
-    token = get_access_token()
-    posts = search_subreddit(token, subreddit, keyword, limit=20)
-    
-    if posts is None:
-        return {"error": "Failed to fetch posts from Reddit API"}
-    
-    if len(posts) == 0:
-        return {"error": f"No posts found in r/{subreddit} related to '{keyword}'"}
-    
-    print(f"Found {len(posts)} relevant posts")
-    
-    # Step 2: Get comments for each post
-    posts_with_comments = []
-    for i, post in enumerate(posts):
-        print(f"Fetching comments for post {i+1}/{len(posts)}: {post['title'][:50]}...")
-        comments = get_post_content(token, post['id'], subreddit)
-        
-        if comments is not None:
-            # Add comments to the post dictionary
-            post_with_comments = post.copy()
-            post_with_comments['comments'] = comments
-            posts_with_comments.append(post_with_comments)
-            print(f"Added {len(comments)} comments")
-    
-    if len(posts_with_comments) == 0:
-        return {"error": "Failed to fetch comments for any posts"}
-    
-    # Step 3: Analyze the content with OpenAI
-    print(f"Analyzing {len(posts_with_comments)} posts with comments...")
-    analysis_result = analyze_reddit_content(question, posts_with_comments)
-    
-    if analysis_result is None:
-        return {"error": "Failed to analyze content with OpenAI"}
-    
-    # Return the results
-    return {
-        "question": question,
-        "subreddit": subreddit,
-        "keyword": keyword,
-        "num_posts_analyzed": len(posts_with_comments),
-        "total_comments": sum(len(post.get('comments', [])) for post in posts_with_comments),
-        "analysis": analysis_result
-    }
+app = FastAPI()
 
-# Example usage
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+class RedditQuery(BaseModel):
+    subreddit: str
+    keyword: str
+    question: str
+    limit: int = 10
+    repeatHours: int = 0
+    repeatMinutes: int = 0
+
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        if websocket in self.active_connections:
+            self.active_connections.remove(websocket)
+
+    async def send_message(self, websocket: WebSocket, message: str):
+        await websocket.send_text(message)
+
+manager = ConnectionManager()
+
+@app.websocket("/ws/query")
+async def websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        # Wait for the query parameters
+        query_json = await websocket.receive_text()
+        query_data = json.loads(query_json)
+        
+        # Convert to RedditQuery model
+        query = RedditQuery(**query_data)
+        
+        # Send initial status
+        await manager.send_message(
+            websocket,
+            json.dumps({"status": "Starting query..."})
+        )
+        
+        # Define progress callback
+        async def progress_callback(message: str):
+            await manager.send_message(
+                websocket,
+                json.dumps({"status": message})
+            )
+        
+        # Process the query
+        results = await process_reddit_query(
+            query.subreddit, 
+            query.keyword, 
+            query.question, 
+            int(query.limit), 
+            int(query.repeatHours), 
+            int(query.repeatMinutes), 
+            progress_callback
+        )
+        print(results)
+        print("Results type:", type(results))
+        print("Results keys:", results.keys() if isinstance(results, dict) else "Not a dict")
+        print("Attempting to stringify results:", json.dumps({"test": "test"}))
+        try:
+            json_results = json.dumps({"status": "Query completed", "results": results})
+            print("Successfully serialized results")
+        except Exception as e:
+            print(f"Error serializing results: {str(e)}")
+            try:
+                json_results = json.dumps({"status": "Query completed", "results": results}, default=str)
+                print("Successfully serialized with default=str")
+            except Exception as e:
+                print(f"Still failed to serialize: {str(e)}")
+        
+        # Send final results
+        await manager.send_message(
+            websocket,
+            json.dumps({"status": "Query completed", "results": results}, default=str)
+        )
+        print("fianl stucture", json.dumps({"status": "Query completed", "results": results}))
+        
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+    except Exception as e:
+        error_message = f"Error: {str(e)}"
+        try:
+            await manager.send_message(websocket, json.dumps({"error": error_message}))
+        except:
+            pass
+        finally:
+            manager.disconnect(websocket)
+
+@app.get("/test")
+async def test():
+    return {"message": "Hello, World!"}
+
+@app.get("/api/health")
+async def health_check():
+    return {"status": "ok"}
+
 if __name__ == "__main__":
-    # Example query
-    subreddit = "UofT"
-    keyword = "bird course"
-    question = "What are the easiest bird courses at UofT according to students?"
-    
-    # Process the query
-    results = process_reddit_query(subreddit, keyword, question)
-    
-    # Display results
-    if "error" in results:
-        print(f"Error: {results['error']}")
-    else:
-        print(f"\n=== Analysis Results ===")
-        print(f"Question: {results['question']}")
-        print(f"Analyzed {results['num_posts_analyzed']} posts with {results['total_comments']} comments")
-        print("\nRecommendations:")
-        print(results['analysis'])
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
