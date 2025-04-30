@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"; // Assuming shadcn setup
+import { useRef } from "react";
 
 // Define the structure based on what your backend sends
 interface AnalysisResult {
@@ -28,8 +29,14 @@ const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({
   progressMessages = [], // Default to empty array
   isLoading,
 }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   // Add debugging to see if component receives props
   useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.scrollTop = scrollElement.scrollHeight;
+    }
+
     console.log("AnalysisDisplay rendered with:", {
       hasResult: !!analysisResult,
       resultData: analysisResult,
@@ -39,7 +46,7 @@ const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({
   }, [analysisResult, progressMessages, isLoading]);
 
   return (
-    <Card className="w-full h-full flex flex-col">
+    <Card className="w-full h-full flex flex-col min-h-0">
       {" "}
       {/* Make card take full height of flex item */}
       <CardHeader>
@@ -48,7 +55,7 @@ const AnalysisDisplay: React.FC<AnalysisDisplayProps> = ({
           Results from the backend will appear here.
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-grow overflow-y-auto">
+      <CardContent ref={scrollRef} className="flex-1 overflow-y-auto min-h-0">
         {/* Always show progress messages if available */}
         {progressMessages.length > 0 && (
           <div className="space-y-2 mb-4">

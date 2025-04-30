@@ -112,6 +112,8 @@ const QueryForm: React.FC<QueryFormProps> = ({
     // Call the parent's onSubmit handler if provided
     if (onSubmit) {
       onSubmit(submissionData);
+      setIsLoading(false);
+      if (setParentLoading) setParentLoading(false);
       return; // Parent will handle everything else
     }
 

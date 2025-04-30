@@ -1,8 +1,8 @@
-"use client"; // Required for useState, useEffect, useRef hooks
+"use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import QueryForm from "./components/form"; // Import form component
-import AnalysisDisplay from "./components/result"; // Import display component
+import QueryForm from "./components/form";
+import AnalysisDisplay from "./components/result";
 
 // Interface for the final analysis result structure from backend
 interface AnalysisResult {
@@ -155,18 +155,15 @@ export default function Home() {
   }, [analysisResult]);
 
   return (
-    <main className="container mx-auto p-4 md:p-8 flex flex-col min-h-screen">
+    <main className="container mx-auto p-4 md:p-8 flex flex-col h-screen">
       <h1 className="text-3xl font-bold tracking-tight mb-6 text-foreground text-center md:text-left">
         Reddit Analyzer
       </h1>
-      <div className="flex flex-col md:flex-row flex-grow gap-6 md:gap-8">
-        <div className="w-full md:w-1/2">
-          <QueryForm
-            onSubmit={handleFormSubmit}
-            setIsLoading={setIsAnalysisLoading}
-          />
+      <div className="flex flex-col md:flex-row flex-grow gap-6 md:gap-8 overflow-hidden min-h-0">
+        <div className="w-full md:w-1/2 flex flex-col overflow-hidden min-h-0">
+          <QueryForm onSubmit={handleFormSubmit} setIsLoading={() => {}} />
         </div>
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 flex flex-col overflow-hidden min-h-0">
           <AnalysisDisplay
             analysisResult={analysisResult}
             progressMessages={progressMessages}
@@ -177,22 +174,3 @@ export default function Home() {
     </main>
   );
 }
-
-// --- IMPORTANT: Ensure QueryForm is adapted ---
-// 1. QueryForm props interface should include:
-//    interface QueryFormProps {
-//      onSubmit: (formData: any) => Promise<void>;
-//      isSubmitting?: boolean; // Optional prop to disable button
-//    }
-// 2. QueryForm's internal handleSubmit should call `await props.onSubmit(formData);`
-// 3. QueryForm's submit button can use `disabled={props.isSubmitting || internalLoadingState}`
-
-// --- IMPORTANT: Ensure AnalysisDisplay is adapted ---
-// 1. AnalysisDisplay props interface should include:
-//    interface AnalysisDisplayProps {
-//      analysisText: string | null;
-//      progressMessages: string[];
-//      isLoading: boolean;
-//    }
-// 2. AnalysisDisplay should render the `progressMessages` array (e.g., as a list)
-//    and the final `analysisText` when available.
