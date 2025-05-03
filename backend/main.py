@@ -44,7 +44,6 @@ manager = ConnectionManager()
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     try:
-        # Wait for the query parameters
         query_json = await websocket.receive_text()
         query_data = json.loads(query_json)
         

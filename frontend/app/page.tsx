@@ -3,6 +3,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import QueryForm from "./components/form";
 import AnalysisDisplay from "./components/result";
+import Login from "./components/login";
+import Signup from "./components/signup";
 
 // Interface for the final analysis result structure from backend
 interface AnalysisResult {
@@ -156,9 +158,15 @@ export default function Home() {
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex flex-col h-screen">
-      <h1 className="text-3xl font-bold tracking-tight mb-6 text-foreground text-center md:text-left">
-        Reddit Analyzer
-      </h1>
+      <header className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          Reddit Analyzer
+        </h1>
+        <div className="flex gap-4">
+          <Signup />
+          <Login />
+        </div>
+      </header>
       <div className="flex flex-col md:flex-row flex-grow gap-6 md:gap-8 overflow-hidden min-h-0">
         <div className="w-full md:w-1/2 flex flex-col overflow-hidden min-h-0">
           <QueryForm onSubmit={handleFormSubmit} setIsLoading={() => {}} />
