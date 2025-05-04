@@ -5,7 +5,13 @@ from api.process_query import process_reddit_query
 import json
 from typing import List, Dict, Any
 
+# Import the auth router (local module)
+from routers import auth
+
 app = FastAPI()
+
+# Include the auth router
+app.include_router(auth.router)
 
 app.add_middleware(
     CORSMiddleware,
