@@ -1,0 +1,735 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		77119B792D85570F00E1D31C /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77119B782D85570F00E1D31C /* WidgetKit.framework */; };
+		77119B7B2D85570F00E1D31C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77119B7A2D85570F00E1D31C /* SwiftUI.framework */; };
+		77119B872D85571000E1D31C /* monthlyWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 77119B762D85570F00E1D31C /* monthlyWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		77119B562D8556F300E1D31C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 77119B3C2D8556F300E1D31C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 77119B432D8556F300E1D31C;
+			remoteInfo = "awesome-MacOS-widgets";
+		};
+		77119B602D8556F400E1D31C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 77119B3C2D8556F300E1D31C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 77119B432D8556F300E1D31C;
+			remoteInfo = "awesome-MacOS-widgets";
+		};
+		77119B852D85571000E1D31C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 77119B3C2D8556F300E1D31C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 77119B752D85570F00E1D31C;
+			remoteInfo = monthlyWidgetsExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		77119B8C2D85571000E1D31C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				77119B872D85571000E1D31C /* monthlyWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		77119B442D8556F300E1D31C /* awesome-MacOS-widgets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "awesome-MacOS-widgets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77119B552D8556F300E1D31C /* awesome-MacOS-widgetsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "awesome-MacOS-widgetsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77119B5F2D8556F400E1D31C /* awesome-MacOS-widgetsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "awesome-MacOS-widgetsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77119B762D85570F00E1D31C /* monthlyWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = monthlyWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		77119B782D85570F00E1D31C /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		77119B7A2D85570F00E1D31C /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		77119B882D85571000E1D31C /* Exceptions for "monthlyWidgets" folder in "monthlyWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 77119B752D85570F00E1D31C /* monthlyWidgetsExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		77119B462D8556F300E1D31C /* awesome-MacOS-widgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "awesome-MacOS-widgets";
+			sourceTree = "<group>";
+		};
+		77119B582D8556F400E1D31C /* awesome-MacOS-widgetsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "awesome-MacOS-widgetsTests";
+			sourceTree = "<group>";
+		};
+		77119B622D8556F400E1D31C /* awesome-MacOS-widgetsUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "awesome-MacOS-widgetsUITests";
+			sourceTree = "<group>";
+		};
+		77119B7C2D85570F00E1D31C /* monthlyWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				77119B882D85571000E1D31C /* Exceptions for "monthlyWidgets" folder in "monthlyWidgetsExtension" target */,
+			);
+			path = monthlyWidgets;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		77119B412D8556F300E1D31C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B522D8556F300E1D31C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B5C2D8556F400E1D31C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B732D85570F00E1D31C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				77119B7B2D85570F00E1D31C /* SwiftUI.framework in Frameworks */,
+				77119B792D85570F00E1D31C /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		77119B3B2D8556F300E1D31C = {
+			isa = PBXGroup;
+			children = (
+				77119B462D8556F300E1D31C /* awesome-MacOS-widgets */,
+				77119B582D8556F400E1D31C /* awesome-MacOS-widgetsTests */,
+				77119B622D8556F400E1D31C /* awesome-MacOS-widgetsUITests */,
+				77119B7C2D85570F00E1D31C /* monthlyWidgets */,
+				77119B772D85570F00E1D31C /* Frameworks */,
+				77119B452D8556F300E1D31C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		77119B452D8556F300E1D31C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				77119B442D8556F300E1D31C /* awesome-MacOS-widgets.app */,
+				77119B552D8556F300E1D31C /* awesome-MacOS-widgetsTests.xctest */,
+				77119B5F2D8556F400E1D31C /* awesome-MacOS-widgetsUITests.xctest */,
+				77119B762D85570F00E1D31C /* monthlyWidgetsExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		77119B772D85570F00E1D31C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				77119B782D85570F00E1D31C /* WidgetKit.framework */,
+				77119B7A2D85570F00E1D31C /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		77119B432D8556F300E1D31C /* awesome-MacOS-widgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77119B692D8556F400E1D31C /* Build configuration list for PBXNativeTarget "awesome-MacOS-widgets" */;
+			buildPhases = (
+				77119B402D8556F300E1D31C /* Sources */,
+				77119B412D8556F300E1D31C /* Frameworks */,
+				77119B422D8556F300E1D31C /* Resources */,
+				77119B8C2D85571000E1D31C /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				77119B862D85571000E1D31C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				77119B462D8556F300E1D31C /* awesome-MacOS-widgets */,
+			);
+			name = "awesome-MacOS-widgets";
+			packageProductDependencies = (
+			);
+			productName = "awesome-MacOS-widgets";
+			productReference = 77119B442D8556F300E1D31C /* awesome-MacOS-widgets.app */;
+			productType = "com.apple.product-type.application";
+		};
+		77119B542D8556F300E1D31C /* awesome-MacOS-widgetsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77119B6C2D8556F400E1D31C /* Build configuration list for PBXNativeTarget "awesome-MacOS-widgetsTests" */;
+			buildPhases = (
+				77119B512D8556F300E1D31C /* Sources */,
+				77119B522D8556F300E1D31C /* Frameworks */,
+				77119B532D8556F300E1D31C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				77119B572D8556F300E1D31C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				77119B582D8556F400E1D31C /* awesome-MacOS-widgetsTests */,
+			);
+			name = "awesome-MacOS-widgetsTests";
+			packageProductDependencies = (
+			);
+			productName = "awesome-MacOS-widgetsTests";
+			productReference = 77119B552D8556F300E1D31C /* awesome-MacOS-widgetsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		77119B5E2D8556F400E1D31C /* awesome-MacOS-widgetsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77119B6F2D8556F400E1D31C /* Build configuration list for PBXNativeTarget "awesome-MacOS-widgetsUITests" */;
+			buildPhases = (
+				77119B5B2D8556F400E1D31C /* Sources */,
+				77119B5C2D8556F400E1D31C /* Frameworks */,
+				77119B5D2D8556F400E1D31C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				77119B612D8556F400E1D31C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				77119B622D8556F400E1D31C /* awesome-MacOS-widgetsUITests */,
+			);
+			name = "awesome-MacOS-widgetsUITests";
+			packageProductDependencies = (
+			);
+			productName = "awesome-MacOS-widgetsUITests";
+			productReference = 77119B5F2D8556F400E1D31C /* awesome-MacOS-widgetsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		77119B752D85570F00E1D31C /* monthlyWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77119B892D85571000E1D31C /* Build configuration list for PBXNativeTarget "monthlyWidgetsExtension" */;
+			buildPhases = (
+				77119B722D85570F00E1D31C /* Sources */,
+				77119B732D85570F00E1D31C /* Frameworks */,
+				77119B742D85570F00E1D31C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				77119B7C2D85570F00E1D31C /* monthlyWidgets */,
+			);
+			name = monthlyWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = monthlyWidgetsExtension;
+			productReference = 77119B762D85570F00E1D31C /* monthlyWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		77119B3C2D8556F300E1D31C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					77119B432D8556F300E1D31C = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					77119B542D8556F300E1D31C = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 77119B432D8556F300E1D31C;
+					};
+					77119B5E2D8556F400E1D31C = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 77119B432D8556F300E1D31C;
+					};
+					77119B752D85570F00E1D31C = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = 77119B3F2D8556F300E1D31C /* Build configuration list for PBXProject "awesome-MacOS-widgets" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 77119B3B2D8556F300E1D31C;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 77119B452D8556F300E1D31C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				77119B432D8556F300E1D31C /* awesome-MacOS-widgets */,
+				77119B542D8556F300E1D31C /* awesome-MacOS-widgetsTests */,
+				77119B5E2D8556F400E1D31C /* awesome-MacOS-widgetsUITests */,
+				77119B752D85570F00E1D31C /* monthlyWidgetsExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		77119B422D8556F300E1D31C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B532D8556F300E1D31C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B5D2D8556F400E1D31C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B742D85570F00E1D31C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		77119B402D8556F300E1D31C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B512D8556F300E1D31C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B5B2D8556F400E1D31C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77119B722D85570F00E1D31C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		77119B572D8556F300E1D31C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 77119B432D8556F300E1D31C /* awesome-MacOS-widgets */;
+			targetProxy = 77119B562D8556F300E1D31C /* PBXContainerItemProxy */;
+		};
+		77119B612D8556F400E1D31C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 77119B432D8556F300E1D31C /* awesome-MacOS-widgets */;
+			targetProxy = 77119B602D8556F400E1D31C /* PBXContainerItemProxy */;
+		};
+		77119B862D85571000E1D31C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 77119B752D85570F00E1D31C /* monthlyWidgetsExtension */;
+			targetProxy = 77119B852D85571000E1D31C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		77119B672D8556F400E1D31C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		77119B682D8556F400E1D31C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		77119B6A2D8556F400E1D31C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "awesome-MacOS-widgets/awesome_MacOS_widgets.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"awesome-MacOS-widgets/Preview Content\"";
+				DEVELOPMENT_TEAM = RFU2AU38ZS;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yingxu.awesome-MacOS-widgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		77119B6B2D8556F400E1D31C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "awesome-MacOS-widgets/awesome_MacOS_widgets.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"awesome-MacOS-widgets/Preview Content\"";
+				DEVELOPMENT_TEAM = RFU2AU38ZS;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yingxu.awesome-MacOS-widgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		77119B6D2D8556F400E1D31C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RFU2AU38ZS;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yingxu.awesome-MacOS-widgetsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/awesome-MacOS-widgets.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/awesome-MacOS-widgets";
+			};
+			name = Debug;
+		};
+		77119B6E2D8556F400E1D31C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RFU2AU38ZS;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yingxu.awesome-MacOS-widgetsTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/awesome-MacOS-widgets.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/awesome-MacOS-widgets";
+			};
+			name = Release;
+		};
+		77119B702D8556F400E1D31C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RFU2AU38ZS;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yingxu.awesome-MacOS-widgetsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "awesome-MacOS-widgets";
+			};
+			name = Debug;
+		};
+		77119B712D8556F400E1D31C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RFU2AU38ZS;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yingxu.awesome-MacOS-widgetsUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "awesome-MacOS-widgets";
+			};
+			name = Release;
+		};
+		77119B8A2D85571000E1D31C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = monthlyWidgets/monthlyWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RFU2AU38ZS;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = monthlyWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = monthlyWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yingxu.awesome-MacOS-widgets.monthlyWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		77119B8B2D85571000E1D31C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = monthlyWidgets/monthlyWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RFU2AU38ZS;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = monthlyWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = monthlyWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yingxu.awesome-MacOS-widgets.monthlyWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		77119B3F2D8556F300E1D31C /* Build configuration list for PBXProject "awesome-MacOS-widgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77119B672D8556F400E1D31C /* Debug */,
+				77119B682D8556F400E1D31C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		77119B692D8556F400E1D31C /* Build configuration list for PBXNativeTarget "awesome-MacOS-widgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77119B6A2D8556F400E1D31C /* Debug */,
+				77119B6B2D8556F400E1D31C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		77119B6C2D8556F400E1D31C /* Build configuration list for PBXNativeTarget "awesome-MacOS-widgetsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77119B6D2D8556F400E1D31C /* Debug */,
+				77119B6E2D8556F400E1D31C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		77119B6F2D8556F400E1D31C /* Build configuration list for PBXNativeTarget "awesome-MacOS-widgetsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77119B702D8556F400E1D31C /* Debug */,
+				77119B712D8556F400E1D31C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		77119B892D85571000E1D31C /* Build configuration list for PBXNativeTarget "monthlyWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77119B8A2D85571000E1D31C /* Debug */,
+				77119B8B2D85571000E1D31C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 77119B3C2D8556F300E1D31C /* Project object */;
+}

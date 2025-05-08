@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
+from datetime import datetime
 
 # Schema for receiving data from next-auth
 class UserSync(BaseModel):
@@ -27,4 +28,13 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    user_id: Optional[int] = None 
+    user_id: Optional[int] = None
+
+class ChatHistoryOut(BaseModel):
+    id: int
+    message: str
+    response: str | None = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True 

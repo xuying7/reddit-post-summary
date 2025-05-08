@@ -75,13 +75,13 @@ def get_access_token():
         print(f"An unexpected error occurred during authentication: {e}")
         return None
 
-def search_subreddit(token, subreddit, keyword, limit):
+def search_subreddit(token, subreddit, keyword, limit, sort_order="hot"):
     
     if not token:
         print("Error: No access token provided for search.")
         return None
 
-    print(f"\nSearching r/{subreddit} for keyword '{keyword}', sorting by ''...")
+    print(f"\nSearching r/{subreddit} for keyword '{keyword}', sorting by '{sort_order}'...")
     try:
         # Construct the API endpoint URL
         search_url = f"{API_BASE_URL}/r/{subreddit}/search.json"
@@ -96,7 +96,7 @@ def search_subreddit(token, subreddit, keyword, limit):
         params = {
             'q': keyword,
             'restrict_sr': 'true', # Restrict search to the specified subreddit
-            'sort': 'hot',
+            'sort': sort_order,    # Use the sort_order parameter
             'limit': limit
             # 't': 'week' # Optional: time filter for 'top' or 'controversial' sort (e.g., 'hour', 'day', 'week', 'month', 'year', 'all')
         }
@@ -200,8 +200,8 @@ if __name__ == "__main__":
             token=access_token,
             subreddit=subreddit_name,
             keyword=search_keyword,
-            sort_order="hot",  # You can change this to 'new', 'top', 'relevance' etc.
-            limit=10          # Get up to 10 posts
+            limit=10,          # Get up to 10 posts
+            sort_order="hot" # Example sort order for standalone execution
         )
 
         # 3. Process and print the results

@@ -32,7 +32,7 @@ def analyze_reddit_content(question, posts_with_comments):
         
         # Call OpenAI API
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo-16k",  # Using a model with higher context length
+            model="gpt-4o",  # Using a model with higher context length
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that analyzes Reddit discussions and provides concise, accurate summaries of community recommendations and opinions."},
                 {"role": "user", "content": prompt}
@@ -87,18 +87,18 @@ def create_analysis_prompt(question, formatted_content):
         Complete prompt string
     """
     return f"""
-I need you to analyze Reddit discussions about the following question:
+You are a friendly and insightful assistant. I've gathered some Reddit discussions related to this question:
 "{question}"
 
-Below are relevant Reddit posts and comments that discuss this topic:
-
+Here's a summary of what people are saying:
 {formatted_content}
 
-Based on these Reddit discussions, please provide:
-1. A concise summary of the most recommended options
-2. For each recommendation, include brief reasons mentioned in the discussions
-3. Any important considerations or warnings mentioned by Redditors
-4. A brief conclusion with the most popular recommendations
+Could you please help me understand what the Reddit community thinks? I'd love a response that feels like a helpful chat with a knowledgeable friend. Specifically, could you:
 
-Format your response in clear sections with bullet points for recommendations.
+1.  Give me a quick overview of the main suggestions or ideas people are talking about.
+2.  For each key suggestion, let me know why Redditors think it's good (or bad!).
+3.  Point out any important tips, warnings, or things I should keep in mind that came up in the discussions.
+4.  Wrap it up with a short conclusion, highlighting what seem to be the most popular or agreed-upon points.
+
+Please make your response easy to read, perhaps using clear headings or bullet points where it makes sense. I'm looking for a helpful summary, not just a list of data. Thanks!
 """

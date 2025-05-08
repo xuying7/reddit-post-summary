@@ -28,6 +28,7 @@ class RedditQuery(BaseModel):
     limit: int = 10
     repeatHours: int = 0
     repeatMinutes: int = 0
+    sort_order: str = "hot"
 
 class ConnectionManager:
     def __init__(self):
@@ -63,11 +64,21 @@ async def websocket_endpoint(websocket: WebSocket):
         )
         
         # Define progress callback
-        async def progress_callback(message: str):
-            await manager.send_message(
-                websocket,
-                json.dumps({"status": message})
-            )
+        async def progress_callback(data_to_send: Any):
+            payload_str = ""
+            if isinstance(data_to_send, str):
+                # This is a status message string
+                payload_str = json.dumps({"status": data_to_send})
+            elif isinstance(data_to_send, dict):
+                # This is structured data (e.g., a comment object)
+                payload_str = json.dumps(data_to_send)
+            else:
+                # Fallback for unexpected types, log and send an error
+                print(f"Warning: Unexpected data type in progress_callback: {type(data_to_send)}")
+                payload_str = json.dumps({"error": "Unexpected data format from backend processing."})
+            
+            if payload_str: # Ensure there is a payload to send
+                await manager.send_message(websocket, payload_str)
         
         # Process the query
         results = await process_reddit_query(
@@ -77,7 +88,8 @@ async def websocket_endpoint(websocket: WebSocket):
             int(query.limit), 
             int(query.repeatHours), 
             int(query.repeatMinutes), 
-            progress_callback
+            progress_callback,
+            query.sort_order
         )
         print(results)
         print("Results type:", type(results))

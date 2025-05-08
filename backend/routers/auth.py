@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from typing import List
 
 import crud, schemas, security, models
 from database import get_db, engine
@@ -54,4 +55,9 @@ def sync_user_from_provider(
         data={"sub": str(db_user.id)}
     )
 
-    return {"access_token": access_token, "token_type": "bearer"} 
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/history", response_model=List[schemas.ChatHistoryOut])
+async def get_user_history(current_user: models.User = Depends(get_db)):
+    # Placeholder - to implement once authentication dependency setup
+    return [] 
