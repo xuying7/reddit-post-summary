@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional, List
+from typing import Optional, List, Any, Dict
 from datetime import datetime
 
 # Schema for receiving data from next-auth
@@ -34,6 +34,32 @@ class ChatHistoryOut(BaseModel):
     id: int
     message: str
     response: str | None = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+# Schemas for ParameterHistory
+class ParameterHistoryBase(BaseModel):
+    parameters: str # Stored as JSON string in model
+    title: Optional[str] = None
+
+class ParameterHistoryCreate(ParameterHistoryBase):
+    pass
+
+class ParameterHistoryOut(ParameterHistoryBase):
+    id: int
+    session_uuid: str # For frontend chat_id
+    user_id: int
+    created_at: datetime
+    title: Optional[str] = None # Ensure title is here if it can be None
+
+    class Config:
+        from_attributes = True
+
+class ParameterHistoryListItem(BaseModel):
+    session_uuid: str # The chat_id
+    title: Optional[str] = None # Title can be optional
     created_at: datetime
 
     class Config:

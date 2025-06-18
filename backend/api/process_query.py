@@ -4,6 +4,9 @@ import asyncio
 import json
 from api.ai_analysis import analyze_reddit_content
 
+# Define a custom exception for analysis errors
+class AnalysisError(Exception):
+    pass
 
 async def process_reddit_query(subreddit, keyword, question, limit, repeatHours, repeatMinutes, progress_callback=None, sort_order="hot"):
     """
@@ -91,11 +94,20 @@ async def process_reddit_query(subreddit, keyword, question, limit, repeatHours,
     
     # Step 3: Analyze the content with OpenAI
     await send_progress_message(f"Got all the data! Now, I'm analyzing {len(posts_with_comments)} post(s) and {comment_count} comment(s) to answer your question. This might take a moment... 🤔")
-    analysis_result = analyze_reddit_content(question, posts_with_comments)
-    
-    if analysis_result is None:
-        await send_progress_message("I encountered an issue while trying to analyze the content. Please try again later.")
-        return {"error": "Failed to analyze content with OpenAI"}
+    try:
+        analysis_result = analyze_reddit_content(question, posts_with_comments)
+        if analysis_result is None: # Or if analyze_reddit_content raises its own error caught below
+             await send_progress_message("Analysis resulted in no content.") # Inform user
+             # Decide if this should be a hard error or return empty analysis
+             # For now, let's treat it as an error to be caught by the endpoint
+             raise AnalysisError("Failed to get analysis from AI provider (returned None).")
+
+    except Exception as e:
+        # Catch potential errors from analyze_reddit_content (like timeouts, API errors)
+        error_message = f"Error during OpenAI analysis: {str(e)}"
+        await send_progress_message(error_message) # Send error status via callback
+        # Reraise as a specific error type
+        raise AnalysisError(error_message) from e
     
     await send_progress_message(f"Done! I've finished analyzing the discussions. Here's what I found: 💡")
     

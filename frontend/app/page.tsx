@@ -1,13 +1,32 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
 import Login from "./components/login";
 import Signup from "./components/signup";
 import ParameterForm, { ParamData } from "./components/parameter-form";
-import HistoryList, { HistoryItem } from "./components/history-list";
+import HistoryList, {
+  HistoryItem as ImportedHistoryItem,
+} from "./components/history-list";
 import ChatWindow, { ChatMessage } from "./components/chat-window";
 
-// Interface for the final analysis result structure from backend
+// Define the shape of the list item coming from the backend GET /api/history
+interface BackendHistoryListItem {
+  session_uuid: string;
+  title: string | null;
+  created_at: string; // comes as ISO string from JSON
+}
+
+// Frontend state item
+export interface PageHistoryItem {
+  id: string;
+  question: string; // Corresponds to backend 'title'
+  subreddit: string; // Will be empty initially, fetched in Phase 3
+  keyword: string; // Will be empty initially, fetched in Phase 3
+  messages: ChatMessage[]; // Will be empty initially, fetched in Phase 3
+  timestamp?: string; // Corresponds to backend 'created_at'
+}
+
 interface AnalysisResult {
   question: string;
   subreddit: string;
@@ -18,7 +37,7 @@ interface AnalysisResult {
   post_urls?: string[];
 }
 
-interface WebSocketMessage {
+interface WebSocketResponseData {
   status?: string;
   error?: string;
   results?: AnalysisResult;
@@ -30,14 +49,14 @@ interface WebSocketMessage {
     score?: number;
     created_utc?: number;
   };
+  chat_id?: string;
 }
 
 export default function Home() {
-  // State for loading status
+  const { data: session, status: sessionStatus } = useSession();
+
   const [isAnalysisLoading, setIsAnalysisLoading] = useState<boolean>(false);
-  // State for WebSocket connection status
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  // Ref to hold the WebSocket instance
   const wsRef = useRef<WebSocket | null>(null);
   const [params, setParams] = useState<ParamData>({
     subreddit: "",
@@ -47,13 +66,59 @@ export default function Home() {
     repeatMinutes: "0",
     sortOrder: "hot",
   });
-  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [history, setHistory] = useState<PageHistoryItem[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [selectedHistoryId, setSelectedHistoryId] = useState<
-    HistoryItem["id"] | undefined
-  >();
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);
+  const [tempClientSideHistoryId, setTempClientSideHistoryId] = useState<
+    string | null
+  >(null);
 
-  // Cleanup function for WebSocket connection
+  // --- Phase 2: Fetch History List ---
+  useEffect(() => {
+    const fetchHistoryList = async () => {
+      if (sessionStatus === "authenticated" && session?.backendToken) {
+        console.log("Fetching history list...");
+        try {
+          const response = await fetch("/api/history", {
+            headers: {
+              Authorization: `Bearer ${session.backendToken}`,
+            },
+          });
+          if (response.ok) {
+            const backendList: BackendHistoryListItem[] = await response.json();
+            console.log("Fetched history list data:", backendList);
+            // Transform backend data to frontend PageHistoryItem
+            const frontendHistory = backendList.map((item) => ({
+              id: item.session_uuid, // Use session_uuid as the unique ID
+              question: item.title || "Untitled Analysis", // Use title for display
+              subreddit: "", // Will be populated when selected in Phase 3
+              keyword: "", // Will be populated when selected in Phase 3
+              messages: [], // Will be populated when selected in Phase 3
+              timestamp: item.created_at, // Store the creation timestamp
+            }));
+            setHistory(frontendHistory);
+          } else {
+            console.error(
+              "Failed to fetch history list:",
+              response.status,
+              response.statusText
+            );
+            setHistory([]); // Clear history on error
+          }
+        } catch (error) {
+          console.error("Error fetching history list:", error);
+          setHistory([]); // Clear history on error
+        }
+      } else {
+        // Clear history if user logs out or is not authenticated
+        setHistory([]);
+      }
+    };
+
+    fetchHistoryList();
+  }, [sessionStatus, session?.backendToken]); // Re-fetch if auth status or token changes
+  // --- End Phase 2 Fetch ---
+
   useEffect(() => {
     return () => {
       if (wsRef.current) {
@@ -62,153 +127,137 @@ export default function Home() {
     };
   }, []);
 
-  const handleHistorySelect = (item: HistoryItem) => {
-    setSelectedHistoryId(item.id);
+  const handleHistorySelect = (item: ImportedHistoryItem) => {
+    // This will be expanded in Phase 3 to fetch full data from backend
+    setActiveChatId(item.id);
+    // For now, populate from client-side item if available (partial data)
     setParams({
       subreddit: item.subreddit,
       keyword: item.keyword,
-      numberOfPosts: "10",
+      numberOfPosts: "10", // Default, or store/fetch this
       repeatHours: "0",
       repeatMinutes: "0",
-      sortOrder: "hot",
+      sortOrder: "hot", // Default, or store/fetch this
     });
     setMessages(item.messages);
   };
 
-  // Function to handle the form submission
   const handleFormSubmit = async (
     formData: ParamData & { question: string }
   ) => {
-    // Reset states
-    setIsAnalysisLoading(true);
-
-    // Save to history list client-side (could be replaced by backend fetch)
-    const newHistId = Date.now();
-    setHistory((prev) => [
-      {
-        id: newHistId,
-        question: formData.question,
-        subreddit: formData.subreddit,
-        keyword: formData.keyword,
-        messages: [],
-      },
-      ...prev,
-    ]);
-    setSelectedHistoryId(newHistId);
-    setMessages([]);
-
-    // Close existing WebSocket connection if any
-    if (wsRef.current) {
-      wsRef.current.close();
-      wsRef.current = null;
+    if (sessionStatus === "loading") {
+      setMessages([
+        {
+          role: "system",
+          content: "Authenticating... please wait.",
+        },
+      ]);
+      return;
     }
 
+    const authToken = session?.backendToken as string | undefined;
+
+    if (!authToken) {
+      setMessages([
+        {
+          role: "system",
+          content: "Authentication token not found. Please log in.",
+        },
+      ]);
+      setIsAnalysisLoading(false);
+      return;
+    }
+
+    setIsAnalysisLoading(true);
+    setMessages([]);
+
+    const tempId = `temp-${Date.now()}`;
+    setTempClientSideHistoryId(tempId);
+
+    setActiveChatId(null); // Start with no active chat ID until backend confirms
+    setTempClientSideHistoryId(null);
+
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.onclose = null;
+      wsRef.current.close();
+    }
+    wsRef.current = null;
+
     try {
-      // Format the form data to match what the backend expects
-      const queryData = {
+      const queryDataForBackend = {
         subreddit: formData.subreddit,
         keyword: formData.keyword,
         question: formData.question,
         limit: parseInt(formData.numberOfPosts),
-        repeatHours: parseInt(formData.repeatHours || "0"),
-        repeatMinutes: parseInt(formData.repeatMinutes || "0"),
         sort_order: formData.sortOrder,
       };
 
-      // Create a new WebSocket connection
-      const ws = new WebSocket("ws://localhost:8000/ws/query");
+      const ws = new WebSocket(
+        `ws://localhost:8000/ws/query?token=${authToken}`
+      );
       wsRef.current = ws;
 
-      // Set up WebSocket event handlers
       ws.onopen = () => {
         setIsConnected(true);
         setMessages((prev) => [
           ...prev,
-          { role: "system", content: "Connected to server" },
+          { role: "system", content: "Connected. Starting analysis..." },
         ]);
-
-        // Send the query data once connected
-        ws.send(JSON.stringify(queryData));
-        setMessages((prev) => [
-          ...prev,
-          { role: "system", content: "Query sent to server" },
-        ]);
+        ws.send(
+          JSON.stringify({
+            type: "new_analysis",
+            data: queryDataForBackend,
+          })
+        );
       };
 
       ws.onmessage = (event) => {
+        console.log("Raw WS message received:", event.data);
         try {
-          const data: WebSocketMessage = JSON.parse(event.data);
+          const data: WebSocketResponseData = JSON.parse(event.data);
 
-          // Handle status updates
+          if (data.chat_id && !activeChatId) {
+            const backendChatId = data.chat_id;
+            setActiveChatId(backendChatId);
+          }
+
+          const currentChatIdForMessage = data.chat_id || activeChatId;
+
           if (data.status && typeof data.status === "string") {
-            // Push status as system message (skip noisy early statuses if desired)
             setMessages((prev) => [
               ...prev,
               { role: "system", content: data.status as string },
             ]);
-
-            if (data.status === "Query completed") {
-              setIsAnalysisLoading(false);
-            }
           }
 
-          // Handle results
           if (data.results) {
             const content =
               typeof data.results.analysis === "string"
                 ? data.results.analysis
                 : JSON.stringify(data.results.analysis, null, 2);
-
             const postUrls = data.results.post_urls;
+            const newAssistantMessage: ChatMessage = {
+              role: "assistant",
+              content,
+              postUrls,
+            };
 
-            setMessages((prev) => [
-              ...prev,
-              { role: "assistant", content, postUrls },
-            ]);
+            setMessages((prev) => [...prev, newAssistantMessage]);
             setIsAnalysisLoading(false);
-
-            // update history
-            setHistory((prev) =>
-              prev.map((h) =>
-                h.id === newHistId
-                  ? {
-                      ...h,
-                      messages: [
-                        ...prev.find((x) => x.id === newHistId)!.messages,
-                        { role: "assistant", content, postUrls },
-                      ],
-                    }
-                  : h
-              )
-            );
           }
 
-          // Handle individual comments (if backend sends them with a specific type)
           if (data.type === "comment" && data.comment) {
             const postTitle = data.post?.title || "a post";
             const commentAuthor = data.comment?.author || "Someone";
             const commentBody = data.comment?.body || "said something.";
-            const commentContent = `💬 Comment from u/${commentAuthor} on "${postTitle}":\\n"${commentBody}"`;
-            setMessages((prev) => [
-              ...prev,
-              { role: "system", content: commentContent },
-            ]);
-            setHistory((prev) =>
-              prev.map((h) =>
-                h.id === newHistId
-                  ? {
-                      ...h,
-                      messages: [
-                        ...prev.find((x) => x.id === newHistId)!.messages,
-                        { role: "system", content: commentContent },
-                      ],
-                    }
-                  : h
-              )
-            );
+            const commentContent = `💬 Comment from u/${commentAuthor} on "${postTitle}":\n"${commentBody}"`;
+            const newSystemMessage: ChatMessage = {
+              role: "system",
+              content: commentContent,
+            };
+            setMessages((prev) => [...prev, newSystemMessage]);
           }
 
-          // Handle error
           if (data.error && typeof data.error === "string") {
             setMessages((prev) => [
               ...prev,
@@ -219,51 +268,52 @@ export default function Home() {
           }
         } catch (error) {
           console.error("Failed to parse WebSocket message:", error);
+          setMessages((prev) => [
+            ...prev,
+            { role: "system", content: "Error processing server message." },
+          ]);
         }
       };
 
       ws.onerror = (error) => {
         console.error("WebSocket error:", error);
+        setMessages((prev) => [
+          ...prev,
+          { role: "system", content: "WebSocket connection error." },
+        ]);
         setIsAnalysisLoading(false);
         setIsConnected(false);
       };
 
-      ws.onclose = () => {
-        console.log("WebSocket connection closed");
-        if (isAnalysisLoading) {
-          console.error("Connection closed before analysis completed");
-          setIsAnalysisLoading(false);
+      ws.onclose = (event) => {
+        console.log("WebSocket closed:", event.code, event.reason);
+        if (isAnalysisLoading && event.code !== 1008 && event.code !== 1000) {
+          setMessages((prev) => [
+            ...prev,
+            { role: "system", content: "Connection closed prematurely." },
+          ]);
         }
+        setIsAnalysisLoading(false);
         setIsConnected(false);
+        wsRef.current = null;
       };
     } catch (error) {
-      console.error("Failed to establish WebSocket connection:", error);
+      console.error("WS connection failed:", error);
       const errorMsg = error instanceof Error ? error.message : String(error);
-      console.error(`Connection error: ${errorMsg}`);
+      setMessages((prev) => [
+        ...prev,
+        { role: "system", content: `Connection error: ${errorMsg}` },
+      ]);
       setIsAnalysisLoading(false);
     }
   };
 
   const sendQuestion = async (question: string) => {
-    const formData = {
-      ...params,
-      question,
-    } as ParamData & { question: string };
+    const userMessage: ChatMessage = { role: "user", content: question };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
 
-    // Append user message
-    setMessages((prev) => [...prev, { role: "user", content: question }]);
-    setHistory((prev) =>
-      prev.map((h) =>
-        h.id === selectedHistoryId
-          ? {
-              ...h,
-              messages: [...h.messages, { role: "user", content: question }],
-            }
-          : h
-      )
-    );
-
-    await handleFormSubmit(formData);
+    const currentParams = params;
+    await handleFormSubmit({ ...currentParams, question });
   };
 
   return (
@@ -280,9 +330,9 @@ export default function Home() {
       <div className="flex flex-col md:flex-row flex-grow gap-6 md:gap-8 overflow-hidden min-h-0">
         <div className="w-full md:w-1/4 flex flex-col gap-4 overflow-hidden min-h-0">
           <HistoryList
-            history={history}
+            history={history as ImportedHistoryItem[]}
             onSelect={handleHistorySelect}
-            selectedId={selectedHistoryId ?? undefined}
+            selectedId={activeChatId ?? undefined}
           />
           <ParameterForm params={params} onParamsChange={setParams} />
         </div>

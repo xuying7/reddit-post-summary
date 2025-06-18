@@ -2,12 +2,12 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export interface HistoryItem {
-  id: number | string;
+  id: string;
   question: string;
   subreddit: string;
   keyword: string;
   messages: import("./chat-window").ChatMessage[];
-  created_at?: string;
+  timestamp?: string;
 }
 
 interface HistoryListProps {
